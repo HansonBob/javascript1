@@ -1,3 +1,3 @@
 function bla(){
-    alert("bla");
+    //alert("bla");
 }

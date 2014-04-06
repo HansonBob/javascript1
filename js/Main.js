@@ -8,6 +8,10 @@ var MainLala = function(id){
         alert("id not defined!");
         return false;
     }
+
+    this.getContainerElement = function(){
+        return this.containerElement;
+    }
     
     this.loadScript = function(src, callback){
         if (typeof src!="undefined"
@@ -30,6 +34,9 @@ var MainLala = function(id){
 window.onload = function(){
     var Lala = new MainLala("container");
     Lala.loadScript("js/test.js", callbackTestJs);
+
+    var Map = new LalaMap(Lala.getContainerElement());
+    Map.setContainerDimension();
 
     function callbackTestJs(){
         bla();

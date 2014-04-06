@@ -38,5 +38,5 @@ function Movement(){
         content += "bottom";
     }
 
-    d.innerHTML = content;
+    d.innerHTML = "Debug: "+content;
 }
