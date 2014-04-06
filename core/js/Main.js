@@ -31,9 +31,11 @@ var MainLala = function(id){
     };
 };
 
+var globalKeys = new Array();
+
 window.onload = function(){
     var Lala = new MainLala("container");
-    Lala.loadScript("js/test.js", callbackTestJs);
+    Lala.loadScript("tests/test.js", callbackTestJs);
 
     var Map = new LalaMap(Lala.getContainerElement());
     Map.setContainerDimension();
