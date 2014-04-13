@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">
+            body { background:#ccc; }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <script type="text/javascript">
+            window.onload = function(){
+                var canvas = document.getElementById("canvas");
+                canvas.width = 48;
+                canvas.height = 48;
+                var canvasContext2d = canvas.getContext("2d");
+                var backgroundImage = new Image(16, 16);
+                var playerImage = new Image(48, 48);
+                backgroundImage.src = "map/gras1.png";
+                playerImage.src = "player/player.png";
+
+                backgroundImage.onload = function(){
+                    canvasContext2d.drawImage(backgroundImage, 0, 0, 48, 48);
+                };
+
+                playerImage.onload = function(){
+                    canvasContext2d.drawImage(playerImage, 0, 0);
+                };
+            };
+        </script>
+    </body>
+</html>
