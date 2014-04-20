@@ -7,24 +7,68 @@
     </head>
     <body>
         <canvas id="canvas"></canvas>
+        <a id="left">left</a>&nbsp;&nbsp;&nbsp;<a id="right">right</a>
+        <div id="debug"></div>
         <script type="text/javascript">
+            function left(canvasContext2d, playerImage){
+                canvasContext2d.drawImage(playerImage, 0, -48, 48, 240);
+            }
+
+            function right(canvasContext2d, playerImage){
+                canvasContext2d.drawImage(playerImage, 0, -96, 48, 240);
+            }
+
+            function up(canvasContext2d, playerImage){
+                canvasContext2d.drawImage(playerImage, 0, -144, 48, 240);
+            }
+
+            function down(canvasContext2d, playerImage){
+                canvasContext2d.drawImage(playerImage, 0, -192, 48, 240);
+            }
+
             window.onload = function(){
                 var canvas = document.getElementById("canvas");
                 canvas.width = 48;
                 canvas.height = 48;
                 var canvasContext2d = canvas.getContext("2d");
                 var backgroundImage = new Image(16, 16);
-                var playerImage = new Image(48, 48);
+                var playerImage = new Image(48, 240);
                 backgroundImage.src = "map/gras1.png";
-                playerImage.src = "player/player.png";
+                playerImage.src = "player/player-all.png";
 
                 backgroundImage.onload = function(){
                     canvasContext2d.drawImage(backgroundImage, 0, 0, 48, 48);
                 };
 
                 playerImage.onload = function(){
-                    canvasContext2d.drawImage(playerImage, 0, 0);
+                    canvasContext2d.drawImage(playerImage, 0, 0, 48, 240);
                 };
+
+                document.body.addEventListener("keydown", function(e){
+                    canvasContext2d.drawImage(backgroundImage, 0, 0, 48, 48);
+                    document.getElementById("debug").innerHTML = ""+e.which;
+
+                    if (e.which==65) {
+                        left(canvasContext2d, playerImage);
+                    }
+
+                    if (e.which==68) {
+                        right(canvasContext2d, playerImage);
+                    }
+
+                    if (e.which==87) {
+                        up(canvasContext2d, playerImage);
+                    }
+
+                    if (e.which==83) {
+                        down(canvasContext2d, playerImage);
+                    }
+                }, true);
+
+                document.body.addEventListener("keyup", function(e){
+                    canvasContext2d.drawImage(backgroundImage, 0, 0, 48, 48);
+                    canvasContext2d.drawImage(playerImage, 0, 0, 48, 240);
+                }, true);
             };
         </script>
     </body>
