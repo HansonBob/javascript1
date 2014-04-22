@@ -4,13 +4,14 @@ var MainLala = function(id){
     ) {
         var containerElement = document.getElementById(id);
         this.containerElement = containerElement;
-    } else {
-        alert("id not defined!");
-        return false;
     }
 
     this.getContainerElement = function(){
-        return this.containerElement;
+        if (typeof this.containerElement!="undefined") {
+            return this.containerElement;
+        } else {
+            return null;
+        }
     }
     
     this.loadScript = function(src, callback){
@@ -37,8 +38,10 @@ window.onload = function(){
     var Lala = new MainLala("container");
     Lala.loadScript("tests/test.js", callbackTestJs);
 
-    var Map = new LalaMap(Lala.getContainerElement());
-    Map.setContainerDimension();
+    var Canvas = new DrawFrame(Lala.getContainerElement());
+    Canvas.setDimension();
+
+    var Map = new LalaMap(Canvas.getCanvas());
 
     function callbackTestJs(){
         bla();
