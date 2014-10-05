@@ -1,9 +1,9 @@
 #debug {
     background:#333;
     color:#fff;
-    left:0px;
+    right:0px;
     padding:10px;
     position:absolute;
-    top:0px;
+    bottom:0px;
     z-index:2;
 }

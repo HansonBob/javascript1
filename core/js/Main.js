@@ -28,37 +28,9 @@ var MainLala = function(id){
             newScript.onload = callback;
 
             docHead.appendChild(newScript);
+            return true;
+        } else {
+            return false;
         }
     };
-};
-
-var globalKeys = new Array();
-
-window.onload = function(){
-    var Lala = new MainLala("container");
-    Lala.loadScript("tests/test.js", callbackTestJs);
-
-    var Canvas = new DrawFrame(Lala.getContainerElement());
-    Canvas.setDimension();
-
-    var Map = new LalaMap(Canvas.getCanvas());
-
-    function callbackTestJs(){
-        bla();
-    }
-
-
-    var InstanceOfSetKeys = new SetKeys(globalKeys);
-
-    var options = {
-        milliseconds : 40
-    };
-
-    var InstanceOfAnimationFrame = new AnimationFrame(options);
-
-    InstanceOfAnimationFrame.setTimer(
-        function(){
-            Movement();
-        }
-    );
 };
