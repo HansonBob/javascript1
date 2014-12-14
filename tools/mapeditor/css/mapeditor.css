@@ -1,0 +1,44 @@
+html, body {
+  margin:0px;
+  padding:0px;
+  width:100%;
+}
+
+.conmap {
+  margin:200px;
+}
+
+.mapgrid {
+  border-collapse:collapse;
+  padding:0px;
+  width:6500px;
+}
+
+.mapgrid div {
+}
+
+.mapgrid div div {
+  border:1px solid #000;
+  float:left;
+  height:30px;
+  overflow:hidden;
+  width:30px;
+}
+
+.mapgrid div .clear {
+  border:0px;
+  clear:both;
+  float:none;
+  height:0px;
+  overflow:hidden;
+  width:0px;
+}
+
+.menuright {
+  background:#999;
+  height:200px;
+  position:fixed;
+  right:0px;
+  top:10px;
+  width:200px;
+}
