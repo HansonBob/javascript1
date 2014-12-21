@@ -21,6 +21,7 @@ html, body {
   border:1px solid #000;
   float:left;
   height:30px;
+  position:relative;
   overflow:hidden;
   width:30px;
 }
@@ -41,4 +42,10 @@ html, body {
   right:0px;
   top:10px;
   width:200px;
+}
+
+.maptextureimg {
+  left:0px;
+  position: absolute;
+  top:0px;
 }

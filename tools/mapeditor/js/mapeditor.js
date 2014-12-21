@@ -65,53 +65,85 @@ function createTextureSelects(con, mainObject){
   }
 
   if (menuright!=null) {
-    var newForm = document.createElement("form");
-    var newLabel = document.createElement("label");
-    newLabel.innerHTML = "Select Texturepack";
-    var newSelect = document.createElement("select");
+    var texturesLoaded = new Array();
+
     for(var i=0; i<texturePacks.length; i++){
-      var newOption = document.createElement("option");
-      newOption.value = texturePacks[i];
-      newOption.innerHTML = texturePacks[i];
-      newSelect.appendChild(newOption);
-    }
+      var mapScriptLoaded = mainObject.loadScript(texturePacks[i], function(){
+        if (mapScriptLoaded===true && typeof mapValues!=="undefined") {
+          var textureGroup = document.createElement("optgroup");
+          textureGroup.setAttribute("label", mapValues.name);
 
-    var newParentSelectTexture = document.createElement("div");
-    var newSubmit = document.createElement("input");
-    newSubmit.type = "submit";
-    newForm.appendChild(newLabel);
-    newForm.appendChild(newSelect);
-    newForm.appendChild(newParentSelectTexture);
-    newForm.appendChild(newSubmit);
-    menuright.appendChild(newForm);
-    newForm.addEventListener("submit", function(e){
-      e.preventDefault();
-      var textureSrc = newSelect.value;
-      if (textureSrc!="") {
-        try {
-          mainObject.loadScript(textureSrc);
-
-          if (typeof mapValues.palette!=="undefined") {
-            var loadedPalette = mapValues.palette;
-            var newSelectTexture = document.createElement("select");
-            for(var i in loadedPalette) {
-              var newOptionTexture = document.createElement("option");
-              newOptionTexture.value = loadedPalette[i][0];
-              newOptionTexture.innerHTML = loadedPalette[i][0];
-              newSelectTexture.appendChild(newOptionTexture);
-            }
-            newParentSelectTexture.innerHTML = "";
-            newParentSelectTexture.appendChild(newSelectTexture);
+          for (var k in mapValues.palette) {
+            texturesLoaded.push(new Array(k, mapValues.palette[k]));
           }
 
-          //newSelect.setAttribute("disabled", "disabled");
-          //newSubmit.setAttribute("disabled", "disabled");
-          saveToStorage();
-        } catch(e) {
-
+          createTextureOptions(textureGroup, texturesLoaded);
+          newSelect.appendChild(textureGroup);
         }
+      });
+    }
+    
+    var newForm = document.createElement("form");
+    var newSelect = document.createElement("select");
+    var newSubmit = document.createElement("input");
+    newSubmit.setAttribute("type", "submit");
+
+    newForm.appendChild(newSelect);
+    newForm.appendChild(newSubmit);
+    menuright.appendChild(newForm);
+
+    newForm.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      var menurightInfo = document.getElementById("menurightinfo");
+      if (typeof menurightInfo!=="undefined" && menurightInfo.innerHTML!=="") {
+        var fieldId = menurightInfo.innerHTML;
+        var fieldObject = document.getElementById(fieldId);
+        setTextureToField(fieldObject, newSelect.value);
       }
     }, true);
+  }
+
+  function setTextureToField(fieldObject, texture) {
+    if (typeof fieldObject!=="undefined" && typeof texture!=="undefined") {
+      var fieldObjectStyles = fieldObject.getAttribute("style");
+      if (fieldObjectStyles!==null
+        && typeof fieldObjectStyles!=="undefined"
+        && fieldObjectStyles.indexOf("background-image")!==-1
+      ) {
+        var newStyle = "background-image:url('"+texture+"');";
+        var regex = /background\-image\:url\(\'.*\'\);/;
+        fieldObjectStyles = fieldObjectStyles.replace(regex, newStyle);
+      } else {
+        fieldObjectStyles = "background-image:url('"+texture+"');background-repeat:no-repeat;background-position:0px 0px;background-size:cover;"
+      }
+
+      fieldObject.setAttribute("style", fieldObjectStyles);
+
+      /*
+      for (var i=0; i<fieldObject.childNodes.length; i++) {
+        var nodeName = fieldObject.childNodes[i].nodeName;
+        if (nodeName=="IMG" || nodeName=="img") {
+          fieldObject.childNodes[i].src = texture;
+          return true;
+        }
+      }
+
+      var newImg = document.createElement("img");
+      newImg.src = texture;
+      newImg.setAttribute("class", "maptextureimg");
+      fieldObject.appendChild(newImg);
+      */
+    }
+  }
+
+  function createTextureOptions(optgroup, texturesLoaded) {
+    for (var i=0; i<texturesLoaded.length; i++) {
+      var newOption = document.createElement("option");
+      newOption.innerHTML = texturesLoaded[i][0];
+      newOption.value = "../../"+texturesLoaded[i][1][0];
+      optgroup.appendChild(newOption);
+    }
   }
 
   function saveToStorage(key, value){
