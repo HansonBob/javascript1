@@ -47,6 +47,8 @@ window.onload = function(){
   }
 
   createTextureSelects(con, MapMainLala);
+  createSaveForm(newMenuRight, newTable);
+  createSpecialFields(newMenuRight);
 };
 
 function createTextureSelects(con, mainObject){
@@ -120,20 +122,15 @@ function createTextureSelects(con, mainObject){
 
       fieldObject.setAttribute("style", fieldObjectStyles);
 
-      /*
-      for (var i=0; i<fieldObject.childNodes.length; i++) {
-        var nodeName = fieldObject.childNodes[i].nodeName;
-        if (nodeName=="IMG" || nodeName=="img") {
-          fieldObject.childNodes[i].src = texture;
-          return true;
+      var allOptions = document.getElementsByTagName("option");
+      if (typeof allOptions!=="undefined") {
+        for (var i=0; i<allOptions.length; i++) {
+          if (allOptions[i].getAttribute("value")===texture) {
+            fieldObject.setAttribute("data-texture", allOptions[i].innerHTML);
+            break;
+          }
         }
       }
-
-      var newImg = document.createElement("img");
-      newImg.src = texture;
-      newImg.setAttribute("class", "maptextureimg");
-      fieldObject.appendChild(newImg);
-      */
     }
   }
 
@@ -182,4 +179,101 @@ function createTextureSelects(con, mainObject){
       return false;
     }
   }
+}
+
+function createSaveForm(parent, mapDiv) {
+  var newForm = document.createElement("form");
+  var newSubmit = document.createElement("input");
+  newSubmit.setAttribute("type", "submit");
+  newSubmit.setAttribute("value", "save");
+  newForm.appendChild(newSubmit);
+  parent.appendChild(newForm);
+
+  newForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var saveString = "";
+    var saveValues = "";
+    var newSaveWindow = window.open("about:blank", "savewindow");
+
+    if (typeof mapDiv!=="undefined") {
+      var mapRows = mapDiv.childNodes;
+      for (var i=0; i<mapRows.length; i++) {
+        for (var k=0; k<mapRows[i].childNodes.length; k++) {
+          var currentCell = mapRows[i].childNodes[k];
+
+          if (typeof currentCell!=="undefined"
+            && currentCell.nodeName.toLowerCase()=="div"
+            && typeof currentCell.getAttribute("style")!=="undefined"
+            && currentCell.getAttribute("style")!==null
+          ) {
+            var cellId = currentCell.getAttribute("id");
+            
+            if (cellId!==null
+              && typeof cellId!=="undefined"
+            ) {
+              cellId = cellId.replace(/\_/, ", ");
+              var cellTexture = currentCell.getAttribute("data-texture");
+              
+              if (saveValues!=="") {
+                saveValues += ","
+              } else {
+                saveValues += "\"values\" : new Array(\n";
+              }
+
+              saveValues += "["+cellId+", \""+cellTexture+"\"]\n";
+            }
+          }
+        }
+      }
+    }
+
+    if (saveValues!=="") {
+      saveValues += "\n),";
+    }
+
+    saveString += "var mapValues = {\n";
+    saveString += saveValues+"\n";
+    saveString += "\n};";
+
+    newSaveWindow.document.write(saveString);
+  }, true);
+}
+
+function createSpecialFields(parent) {
+  var selectOptions = {
+    "remove special" : "removespecial"
+    ,"starts" : "starts"
+    ,"exists" : "exists"
+  };
+
+  var newForm = document.createElement("form");
+  var newSelect = document.createElement("select");
+  var newSubmit = document.createElement("input");
+  newSubmit.setAttribute("type", "submit");
+
+  for (var i in selectOptions) {
+    var newOption = document.createElement("option");
+
+    newOption.setAttribute("value", selectOptions[i]);
+    newOption.innerHTML = i;
+    newSelect.appendChild(newOption);
+  }
+
+  newForm.appendChild(newSelect);
+  newForm.appendChild(newSubmit);
+  parent.appendChild(newForm);
+
+  newForm.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    var fieldId = document.getElementById("menurightinfo").innerHTML;
+    var fieldObject = document.getElementById(fieldId);
+
+    if (newSelect.value!=="removespecial") {
+      fieldIdXY = fieldId.replace(/\_/, ", ");
+      fieldObject.setAttribute("data-special", newSelect.value+","+fieldIdXY);
+    } else {
+      fieldObject.removeAttribute("data-special");
+    }
+  }, true);
 }

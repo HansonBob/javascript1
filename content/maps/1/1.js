@@ -1,5 +1,5 @@
 var mapValues = {
-  "name" : "1 Texture Pack",
+  "name" : "Mapname 1",
   "starts" : new Array(
     [120, 119]
     ,[90, 89]

@@ -8,7 +8,7 @@ window.onload = function(){
     Canvas.setDimension();
 
     var Map = new LalaMap(Canvas.getCanvas());
-    Map.loadMap("content/maps/1/1.js", "1", "");
+    Map.loadMap("content/maps/test/test.js", "test", "");
 
     function callbackTestJs(){
         bla();
