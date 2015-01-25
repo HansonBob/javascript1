@@ -193,6 +193,7 @@ function createSaveForm(parent, mapDiv) {
     e.preventDefault();
     var saveString = "";
     var saveValues = "";
+    var savePalette = {};
     var newSaveWindow = window.open("about:blank", "savewindow");
 
     if (typeof mapDiv!=="undefined") {
@@ -213,6 +214,10 @@ function createSaveForm(parent, mapDiv) {
             ) {
               cellId = cellId.replace(/\_/, ", ");
               var cellTexture = currentCell.getAttribute("data-texture");
+              var cellStyles = currentCell.getAttribute("style");
+              var cellBackgroundImage = cellStyles.match(/background\-image\:url\((.*)\)\;/);
+              cellBackgroundImage = cellBackgroundImage[1].substring("../../".length);
+              cellBackgroundImage = cellBackgroundImage.substring(0, (cellBackgroundImage.length-1));
               
               if (saveValues!=="") {
                 saveValues += ","
@@ -221,6 +226,8 @@ function createSaveForm(parent, mapDiv) {
               }
 
               saveValues += "["+cellId+", \""+cellTexture+"\"]\n";
+
+              savePalette[cellTexture] = new Array(cellBackgroundImage);
             }
           }
         }
@@ -233,9 +240,20 @@ function createSaveForm(parent, mapDiv) {
 
     saveString += "var mapValues = {\n";
     saveString += saveValues+"\n";
+    
+    saveString += "\"palette\" : {\n";
+    var tmpPalette = 0;
+    for (var i in savePalette) {
+      if (tmpPalette!=0) saveString += ",";
+      alert(savePalette);
+      saveString += "\""+i+"\": new Array(\""+savePalette[i][0]+"\")\n";
+      tmpPalette++;
+    }
+    saveString += "}\n";
+
     saveString += "\n};";
 
-    newSaveWindow.document.write(saveString);
+    newSaveWindow.document.write("<pre>"+saveString+"</pre>");
   }, true);
 }
 
