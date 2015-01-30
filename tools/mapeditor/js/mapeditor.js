@@ -51,7 +51,7 @@ window.onload = function(){
   createSpecialFields(newMenuRight);
 };
 
-function createTextureSelects(con, mainObject){
+function searchMenuright(con){
   var menuright = null;
 
   for (var i in con.childNodes) {
@@ -65,6 +65,12 @@ function createTextureSelects(con, mainObject){
       }
     }
   }
+
+  return menuright;
+}
+
+function createTextureSelects(con, mainObject){
+  var menuright = searchMenuright(con);
 
   if (menuright!=null) {
     var texturesLoaded = new Array();
@@ -86,10 +92,14 @@ function createTextureSelects(con, mainObject){
     }
     
     var newForm = document.createElement("form");
+    var newInput = document.createElement("input");
     var newSelect = document.createElement("select");
     var newSubmit = document.createElement("input");
+
+    newInput.setAttribute("name", "mapname");
     newSubmit.setAttribute("type", "submit");
 
+    newForm.appendChild(newInput);
     newForm.appendChild(newSelect);
     newForm.appendChild(newSubmit);
     menuright.appendChild(newForm);
@@ -194,6 +204,7 @@ function createSaveForm(parent, mapDiv) {
     var saveString = "";
     var saveValues = "";
     var savePalette = {};
+    var saveName = "";
     var newSaveWindow = window.open("about:blank", "savewindow");
 
     if (typeof mapDiv!=="undefined") {
@@ -218,6 +229,7 @@ function createSaveForm(parent, mapDiv) {
               var cellBackgroundImage = cellStyles.match(/background\-image\:url\((.*)\)\;/);
               cellBackgroundImage = cellBackgroundImage[1].substring("../../".length);
               cellBackgroundImage = cellBackgroundImage.substring(0, (cellBackgroundImage.length-1));
+              cellBackgroundImage = cellBackgroundImage.substring(1);
               
               if (saveValues!=="") {
                 saveValues += ","
@@ -227,7 +239,7 @@ function createSaveForm(parent, mapDiv) {
 
               saveValues += "["+cellId+", \""+cellTexture+"\"]\n";
 
-              savePalette[cellTexture] = new Array(cellBackgroundImage);
+              savePalette[cellTexture] = new Array(cellBackgroundImage, currentCell.offsetWidth, currentCell.offsetHeight);
             }
           }
         }
@@ -239,14 +251,39 @@ function createSaveForm(parent, mapDiv) {
     }
 
     saveString += "var mapValues = {\n";
+
+    var tmpInputs = document.getElementsByTagName("input");
+
+    if (typeof tmpInputs!=="undefined") {
+      for (var i=0; i<tmpInputs.length; i++) {
+        if (typeof tmpInputs[i]!=="undefined") {
+          var tmpInputName = tmpInputs[i].getAttribute("name");
+          if (tmpInputName!=null && typeof tmpInputName!=="undefined" && tmpInputName==="mapname") {
+            var tmpInputValue = tmpInputs[i].value;
+
+            if (typeof tmpInputValue!=="undefined" && tmpInputValue!=="") {
+              saveName = "\"name\":\""+tmpInputValue+"\",\n";
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    if (saveName=="") {
+      saveName = "\"name\":\""+makeString()+"\",\n";
+    }
+
+    saveString += saveName;
+
     saveString += saveValues+"\n";
-    
+
     saveString += "\"palette\" : {\n";
     var tmpPalette = 0;
     for (var i in savePalette) {
       if (tmpPalette!=0) saveString += ",";
-      alert(savePalette);
-      saveString += "\""+i+"\": new Array(\""+savePalette[i][0]+"\")\n";
+
+      saveString += "\""+i+"\": new Array(\""+savePalette[i][0]+"\","+savePalette[i][1]+","+savePalette[i][2]+")\n";
       tmpPalette++;
     }
     saveString += "}\n";
@@ -294,4 +331,15 @@ function createSpecialFields(parent) {
       fieldObject.removeAttribute("data-special");
     }
   }, true);
+}
+
+function makeString() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < 5; i++ ) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
+  return text;
 }

@@ -1,3 +1,4 @@
+/*
 var mapValues = {
   "name" : "1 Texture Pack",
   "starts" : new Array(
@@ -11,4 +12,16 @@ var mapValues = {
     "gras": new Array("content/maps/1/images/gras1.png", 32, 32)
     ,"dirt": new Array("content/maps/1/images/dirt1.png", 32, 32)
   }
+};
+*/
+var mapValues = {
+"name":"AeadR",
+"values" : new Array(
+[14, 0, "gras"]
+
+),
+"palette" : {
+"gras": new Array("content/maps/1/images/gras1.png",32,32)
+}
+
 };
