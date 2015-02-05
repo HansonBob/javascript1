@@ -95,9 +95,13 @@ function createTextureSelects(con, mainObject){
     var newInput = document.createElement("input");
     var newSelect = document.createElement("select");
     var newSubmit = document.createElement("input");
+    var newEraseButton = document.createElement("option");
 
     newInput.setAttribute("name", "mapname");
     newSubmit.setAttribute("type", "submit");
+    newEraseButton.innerHTML = "erase";
+    newEraseButton.setAttribute("value", "");
+    newSelect.appendChild(newEraseButton);
 
     newForm.appendChild(newInput);
     newForm.appendChild(newSelect);
@@ -117,7 +121,7 @@ function createTextureSelects(con, mainObject){
   }
 
   function setTextureToField(fieldObject, texture) {
-    if (typeof fieldObject!=="undefined" && typeof texture!=="undefined") {
+    if (typeof fieldObject!=="undefined" && typeof texture!=="undefined" && texture!=="") {
       var fieldObjectStyles = fieldObject.getAttribute("style");
       if (fieldObjectStyles!==null
         && typeof fieldObjectStyles!=="undefined"
@@ -141,6 +145,8 @@ function createTextureSelects(con, mainObject){
           }
         }
       }
+    } else if (typeof fieldObject!=="undefined" && texture==="") {
+      eraseField(fieldObject);
     }
   }
 
@@ -150,43 +156,6 @@ function createTextureSelects(con, mainObject){
       newOption.innerHTML = texturesLoaded[i][0];
       newOption.value = "../../"+texturesLoaded[i][1][0];
       optgroup.appendChild(newOption);
-    }
-  }
-
-  function saveToStorage(key, value){
-    if (localStorage
-      && typeof key!=="undefined"
-      && typeof value!=="undefined"
-    ) {
-      localStorage.setItem(key, value);
-    }
-  }
-
-  function removeStorage(key){
-    if (localStorage
-      && typeof key!=="undefined"
-    ) {
-      localStorage.removeItem(key);
-    }
-  }
-
-  function getStorage(keyOrValue){
-    if (localStorage
-      && typeof keyOrValue!=="undefined"
-    ) {
-      if (typeof localStorage[keyOrValue]!=="undefined"){
-        return localStorage[keyOrValue];
-      } else {
-        var storageArray = localStorage;
-        if (storageArray.length!=0) {
-          for (var i in storageArray) {
-            if (storageArray[i]==keyOrValue) {
-              return storageArray[i];
-            }
-          }
-        }
-      }
-      return false;
     }
   }
 }
@@ -338,4 +307,12 @@ function makeString() {
   var text = "map"+d.getTime();
 
   return text;
+}
+
+function eraseField(field) {
+  var styleAttr = field.getAttribute("style");
+  if (styleAttr!==null && typeof styleAttr!=="undefined") {
+    field.removeAttribute("style");
+    field.removeAttribute("data-texture");
+  }
 }
