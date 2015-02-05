@@ -15,13 +15,27 @@ var mapValues = {
 };
 */
 var mapValues = {
-"name":"AeadR",
+"name":"map1423173130862",
 "values" : new Array(
-[14, 0, "gras"]
+[11, 0, "gras"]
+,[12, 0, "dirt"]
+,[13, 0, "dirt"]
+,[14, 0, "gras"]
+,[15, 0, "gras"]
+,[11, 1, "dirt"]
+,[12, 1, "gras"]
+,[13, 1, "gras"]
+,[14, 1, "gras"]
+,[15, 1, "gras"]
+,[11, 2, "dirt"]
+,[12, 2, "gras"]
+,[13, 2, "dirt"]
+,[14, 2, "gras"]
 
 ),
 "palette" : {
 "gras": new Array("content/maps/1/images/gras1.png",32,32)
+,"dirt": new Array("content/maps/1/images/dirt1.png",32,32)
 }
 
 };

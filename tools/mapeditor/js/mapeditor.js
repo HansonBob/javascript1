@@ -87,6 +87,56 @@ function createTextureSelects(con, mainObject){
 
           createTextureOptions(textureGroup, texturesLoaded);
           newSelect.appendChild(textureGroup);
+
+          if (typeof mapValues.name!=="undefined") {
+            var newTextureGroup = document.createElement("div");
+            newTextureGroup.innerHTML = mapValues.name;
+            newTextureGroup.setAttribute("class", "texturegroup");
+            for (var k in mapValues.palette) {
+              var tmpTexture = document.createElement("img");
+              tmpTexture.setAttribute("src", "../../"+mapValues.palette[k][0]);
+              tmpTexture.setAttribute("alt", k);
+              tmpTexture.addEventListener("click", function(){
+
+                for (var L=0;L<newSelect.childNodes.length; L++) {
+                  if (typeof newSelect.childNodes[L].nodeName!=="undefined"
+                    && newSelect.childNodes[L].nodeName=="OPTION"
+                    && newSelect.childNodes[L].getAttribute("value")===this.getAttribute("src")
+                  ) {
+                    newSelect.childNodes[L].setAttribute("selected", "selected");
+                  } else if (typeof newSelect.childNodes[L].nodeName!=="undefined"
+                    && newSelect.childNodes[L].nodeName=="OPTGROUP"
+                    && typeof newSelect.childNodes[L].childNodes!=="undefined"
+                  ) {
+                    for (var m=0; m<newSelect.childNodes[L].childNodes.length; m++) {
+                      if (typeof newSelect.childNodes[L].childNodes[m].nodeName!=="undefined"
+                        && newSelect.childNodes[L].childNodes[m].nodeName=="OPTION"
+                        && newSelect.childNodes[L].childNodes[m].getAttribute("value")===this.getAttribute("src")
+                      ) {
+                        newSelect.childNodes[L].childNodes[m].setAttribute("selected", "selected");
+                      }
+                    }
+                  }
+                }
+
+                newSubmit.click();
+              }, true);
+              newTextureGroup.appendChild(tmpTexture);
+            }
+            
+            newDiv.appendChild(newTextureGroup);
+          } else {
+            for (var k in mapValues.palette) {
+              var tmpTexture = document.createElement("img");
+              tmpTexture.setAttribute("src", "../../"+mapValues.palette[k][0]);
+              tmpTexture.setAttribute("alt", k);
+              tmpTexture.addEventListener("click", function(){
+                newSelect.setAttribute("value", tmpTexture.getAttribute("src"));
+                newSubmit.click();
+              }, true);
+              newDiv.appendChild(tmpTexture);
+            }
+          }
         }
       });
     }
@@ -96,16 +146,18 @@ function createTextureSelects(con, mainObject){
     var newSelect = document.createElement("select");
     var newSubmit = document.createElement("input");
     var newEraseButton = document.createElement("option");
+    var newDiv = document.createElement("div");
 
     newInput.setAttribute("name", "mapname");
     newSubmit.setAttribute("type", "submit");
     newEraseButton.innerHTML = "erase";
     newEraseButton.setAttribute("value", "");
-    newSelect.appendChild(newEraseButton);
 
+    newSelect.appendChild(newEraseButton);
     newForm.appendChild(newInput);
     newForm.appendChild(newSelect);
     newForm.appendChild(newSubmit);
+    newForm.appendChild(newDiv);
     menuright.appendChild(newForm);
 
     newForm.addEventListener("submit", function(e){
