@@ -114,8 +114,12 @@ function createTextureSelects(con, mainObject){
                         && newSelect.childNodes[L].childNodes[m].getAttribute("value")===this.getAttribute("src")
                       ) {
                         newSelect.childNodes[L].childNodes[m].setAttribute("selected", "selected");
+                      } else {
+                        newSelect.childNodes[L].childNodes[m].removeAttribute("selected");
                       }
                     }
+                  } else {
+                    newSelect.childNodes[L].removeAttribute("selected");
                   }
                 }
 
