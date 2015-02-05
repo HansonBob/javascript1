@@ -334,12 +334,8 @@ function createSpecialFields(parent) {
 }
 
 function makeString() {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  for( var i=0; i < 5; i++ ) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
+  var d = new Date();
+  var text = "map"+d.getTime();
 
   return text;
 }
