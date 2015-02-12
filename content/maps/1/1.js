@@ -1,9 +1,9 @@
 var mapValues = {
   "name" : "Mapname 1",
   "starts" : new Array(
-    [120, 119]
-    ,[90, 89]
-    ,[90, 71]
+    [0, 0]
+    ,[4, 0]
+    ,[4, 4]
   ),
   "exits" : new Array(
     [120, 120]

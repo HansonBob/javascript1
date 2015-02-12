@@ -16,7 +16,6 @@ function LalaMap(canvas){
                     var size = mapValues.values.length;
                     var texturesCount = 0;
                     for (var i in mapValues.palette) {
-console.log(mapValues.palette);
                         texturesCount++;
                     }
 

@@ -2,18 +2,26 @@ var globalKeys = new Array();
 
 window.onload = function(){
     var Lala = new MainLala("container");
-    Lala.loadScript("tests/test.js", callbackTestJs);
+    //Lala.loadScript("tests/test.js", callbackTestJs);
 
     var Canvas = new DrawFrame(Lala.getContainerElement());
     Canvas.setDimension();
 
     var Map = new LalaMap(Canvas.getCanvas());
-    Map.loadMap("content/maps/test/test.js", "test", "");
+    var mapEntry = Array(3, 3);
+    Map.loadMap("content/maps/1/1.js", "test", mapEntry);
+
+    var DrawPlayerInstance = new DrawPlayer(
+        Canvas.getCanvas(),
+        mapEntry,
+        {
+            "name" : "Player 1"
+        }
+    );
 
     function callbackTestJs(){
-        bla();
+        
     }
-
 
     var InstanceOfSetKeys = new SetKeys(globalKeys);
 
